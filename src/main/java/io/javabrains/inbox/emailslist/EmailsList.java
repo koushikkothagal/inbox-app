@@ -1,5 +1,6 @@
 package io.javabrains.inbox.emailslist;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -21,6 +22,9 @@ public class EmailsList {
 
     @CassandraType(type = CassandraType.Name.BOOLEAN)
     private boolean isRead;
+
+    @Transient
+    private String agoTimeString;
 
 
     public EmailsListPrimaryKey getId() {
@@ -61,6 +65,14 @@ public class EmailsList {
 
     public void setRead(boolean isRead) {
         this.isRead = isRead;
+    }
+
+    public String getAgoTimeString() {
+        return agoTimeString;
+    }
+
+    public void setAgoTimeString(String agoTimeString) {
+        this.agoTimeString = agoTimeString;
     }
 
 
