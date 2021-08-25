@@ -25,12 +25,11 @@ public class InboxPageController {
         if (principal != null && principal.getAttribute("login") != null) {
             String loginId = principal.getAttribute("login");
             List<Folder> folders = folderRepository.findAllById(loginId);
+            List<Folder> initFolders = InitFolders.init(loginId);
+                // initFolders.stream().forEach(folderRepository::save);
+            model.addAttribute("defaultFolders", initFolders);
             if (folders.size() > 0) {
-                model.addAttribute("folders", folders);
-            } else {
-                List<Folder> initFolders = InitFolders.init(loginId);
-                initFolders.stream().forEach(folderRepository::save);
-                model.addAttribute("folders", initFolders);
+                model.addAttribute("userfolders", folders);
             }
 
             return "inbox-page";
