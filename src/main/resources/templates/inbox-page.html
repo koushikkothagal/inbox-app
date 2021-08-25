@@ -1,16 +1,140 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Inbox</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    
-</head>
-<body>
-    <div
-          th:each="folder : ${folders}">
-            <h1 th:text="${folder.label}"></h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      .container {
+        display: grid;
+
+        grid-template-areas:
+          "header header header"
+          "nav content content"
+          "footer footer footer";
+
+        grid-template-columns: 300px 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-gap: 10px;
+
+        height: 100vh;
+      }
+      header {
+        grid-area: header;
+      }
+
+      nav {
+        grid-area: nav;
+        margin-left: 0.5rem;
+      }
+
+      main {
+        grid-area: content;
+      }
+
+      footer {
+        grid-area: footer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Welcome, Name</h1>
+      </header>
+
+      <nav>
+        <div class="card">
+          <div class="card-header">Folders</div>
+          <div class="card-body">
+            <ul class="list-group">
+              <li
+                class="
+                  list-group-item
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                "
+              >
+                A list item
+                <span class="badge bg-primary rounded-pill">14</span>
+              </li>
+              <li
+                class="
+                  list-group-item
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                "
+              >
+                A second list item
+                <span class="badge bg-primary rounded-pill">2</span>
+              </li>
+              <li
+                class="
+                  list-group-item
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                "
+              >
+                A third list item
+                <span class="badge bg-primary rounded-pill">1</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+      <main>
+        <div class="card">
+            <div class="card-header">Inbox</div>
+            <div class="card-body">
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading</h5>
+                <small>3 days ago</small>
+              </div>
+              <p class="mb-1">Some placeholder content in a paragraph.</p>
+              <small>And some small print.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading</h5>
+                <small class="text-muted">3 days ago</small>
+              </div>
+              <p class="mb-1">Some placeholder content in a paragraph.</p>
+              <small class="text-muted">And some muted small print.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading</h5>
+                <small class="text-muted">3 days ago</small>
+              </div>
+              <p class="mb-1">Some placeholder content in a paragraph.</p>
+              <small class="text-muted">And some muted small print.</small>
+            </a>
+          </div>
+          </div>
+          </div>
+      </main>
+
+      <footer>
+        <!-- Footer content -->
+      </footer>
     </div>
-</body>
+  </body>
 </html>
