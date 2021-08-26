@@ -40,9 +40,12 @@ public class EmailPageController {
             }
             try {
                 UUID uuid = UUID.fromString(id);
-                Optional<Email> email = emailRepository.findById(uuid);
-                if (email.isPresent()) {
-                    model.addAttribute("email", email.get());
+                Optional<Email> optionalEmail = emailRepository.findById(uuid);
+                if (optionalEmail.isPresent()) {
+                    Email email = optionalEmail.get();
+                    String toIds = String.join(",", email.getTo());
+                    model.addAttribute("email", optionalEmail.get());
+                    model.addAttribute("toIds", toIds);
                     return "email-page";
                 }
             } catch (IllegalArgumentException e) {

@@ -56,6 +56,9 @@
       </header>
 
       <nav>
+        <div class="card">
+          <a href="/compose" class="btn btn-primary">Compose message</a>
+        </div>
         <div
           th:insert="components/folder-list :: folder-list (panelName = 'Folders', folders = ${defaultFolders})"
         ></div>
@@ -74,7 +77,7 @@
             </div>
               <div class="mb-3">
                 <dt class="form-label">To</dt>
-                <dd th:text="${email.to}"></dd>
+                <dd th:text="${toIds}"></dd>
               </div>
               <div class="mb-3">
                 <dt class="form-label">Subject</dt>
@@ -84,14 +87,32 @@
                 <dt class="form-label">Body</dt>
                 <dd th:text="${email.body}"></dd>
               </div>
-              <button type="submit" class="btn btn-primary">Reply</button>
-              <a href="/" type="submit" class="btn btn-secondary">Cancel</a>
+              <!-- <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                  Move to folder
+                </a>
+              
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <li th:each="folder : ${defaultFolders}"><a class="dropdown-item" th:text="${folder.label}" href="#">Action</a></li>
+                  <li th:each="folder : ${userFolders}"><a class="dropdown-item" th:text="${folder.label}" href="#">Action</a></li>
+                </ul>
+              </div> -->
+
+              
+              <a th:href="@{'/compose?to=' + ${email.from}}" type="button" class="btn btn-primary">Reply</button>
+              <a th:href="@{'/compose?to=' + ${email.from} + ',' + ${toIds}}" type="button" class="btn btn-primary">Reply All</a>
+                <!-- <form style="display:inline-block;"><select id="moveToFolder" name="moveToFolder" class="form-select" aria-label="Move to folder">
+                  <option th:each="folder : ${defaultFolders}" th:text="${folder.label}">Status</option>
+                </select>
+                <button href="/" class="btn btn-secondary" type="button">Move</button>
+              </form> -->
+              <a href="/" class="btn btn-secondary" type="button">Cancel</a>
             </dl>
         </div>
       </main>
 
       <footer>
-        <!-- Footer content -->
+        
       </footer>
     </div>
   </body>

@@ -56,6 +56,9 @@
       </header>
 
       <nav>
+        <div class="card">
+          <a href="/compose" class="btn btn-primary">Compose message</a>
+        </div>
         <div
             th:insert="components/folder-list :: folder-list (panelName = 'Folders', folders = ${defaultFolders})"
           ></div>
@@ -69,7 +72,7 @@
             <div class="card-header">Inbox</div>
             <div class="card-body">
         <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action" aria-current="true" th:each="email : ${folderEmails}">
+            <a th:href="@{'/email/' + ${email.id.timeId}}"  href="#" class="list-group-item list-group-item-action" aria-current="true" th:each="email : ${folderEmails}">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1" th:text="${email.subject}">Subject</h5>
                 <small th:text="${email.agoTimeString}">3 days ago</small>
