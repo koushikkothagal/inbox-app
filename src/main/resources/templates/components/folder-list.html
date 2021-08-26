@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <div th:fragment="folder-list (panelName, folders)">
+        <div class="card" th:if="${folders}">
+            <div class="card-header" th:text="${panelName}">Folders</div>
+            <div class="card-body">
+              <div class="list-group">
+                <a th:href="@{'/?folder=' + ${folder.label}}" 
+                  class="
+                    list-group-item
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                  "
+                th:each="folder : ${folders}">
+  
+                  <span th:text="${folder.label}">Folder</span>
+                  <span class="badge bg-primary rounded-pill">15</span>
+              </a>
+            </div>
+            </div>
+          </div>
+      
+    </div>
+  </body>
+</html>

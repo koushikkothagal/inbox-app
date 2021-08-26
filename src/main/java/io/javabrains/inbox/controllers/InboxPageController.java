@@ -1,4 +1,4 @@
-package io.javabrains.inbox.inboxpage;
+package io.javabrains.inbox.controllers;
 
 import java.util.Date;
 import java.util.List;
@@ -41,7 +41,7 @@ public class InboxPageController {
                 // initFolders.stream().forEach(folderRepository::save);
             model.addAttribute("defaultFolders", initFolders);
             if (folders.size() > 0) {
-                model.addAttribute("userfolders", folders);
+                model.addAttribute("userFolders", folders);
             }
             if (StringUtils.isBlank(folder)) {
                 folder = "Inbox";
