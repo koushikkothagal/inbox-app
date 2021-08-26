@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Inbox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      .container {
+        display: grid;
+
+        grid-template-areas:
+          "header header header"
+          "nav content content"
+          "footer footer footer";
+
+        grid-template-columns: 300px 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-gap: 10px;
+
+        height: 100vh;
+      }
+      header {
+        grid-area: header;
+      }
+
+      nav {
+        grid-area: nav;
+        margin-left: 0.5rem;
+      }
+
+      main {
+        grid-area: content;
+      }
+
+      footer {
+        grid-area: footer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Welcome, Name</h1>
+      </header>
+
+      <nav>
+        <div
+          th:insert="components/folder-list :: folder-list (panelName = 'Folders', folders = ${defaultFolders})"
+        ></div>
+        <div
+          th:insert="components/folder-list :: folder-list (panelName = 'My folders', folders = ${userFolders})"
+        ></div>
+      </nav>
+
+      <main>
+        <div class="card">
+          <div class="card-header">View Email</div>
+          <dl class="card-body">
+            <div class="mb-3">
+              <dt class="form-label">From</dt>
+              <dd th:text="${email.from}"></dd>
+            </div>
+              <div class="mb-3">
+                <dt class="form-label">To</dt>
+                <dd th:text="${email.to}"></dd>
+              </div>
+              <div class="mb-3">
+                <dt class="form-label">Subject</dt>
+                <dd th:text="${email.subject}"></dd>
+              </div>
+              <div class="mb-3">
+                <dt class="form-label">Body</dt>
+                <dd th:text="${email.body}"></dd>
+              </div>
+              <button type="submit" class="btn btn-primary">Reply</button>
+              <a href="/" type="submit" class="btn btn-secondary">Cancel</a>
+            </dl>
+        </div>
+      </main>
+
+      <footer>
+        <!-- Footer content -->
+      </footer>
+    </div>
+  </body>
+</html>

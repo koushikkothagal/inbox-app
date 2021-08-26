@@ -3,6 +3,7 @@ package io.javabrains.inbox.email;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.CassandraType.Name;
@@ -12,7 +13,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table(value = "emails_by_id")
 public class Email {
 
-    @PrimaryKeyColumn(name = "id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+    @Id @PrimaryKeyColumn(name = "id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     @CassandraType(type = CassandraType.Name.TIMEUUID)
     private UUID id;
 
