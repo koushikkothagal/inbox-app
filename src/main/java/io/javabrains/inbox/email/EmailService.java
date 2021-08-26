@@ -1,5 +1,6 @@
 package io.javabrains.inbox.email;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
@@ -17,6 +18,9 @@ public class EmailService {
     @Autowired
     private EmailsListRepository emailsListRepository;
 
+    @Autowired
+    private EmailRepository emailRepository;
+
     public void sendEmail(String fromUserId, String toUserId, String subject, String body) {
 
         UUID timeUuid = Uuids.timeBased();
@@ -26,6 +30,14 @@ public class EmailService {
         // Add to inbox of each reciever
         EmailsList inboxEntry = prepareEmailsListEntry("Inbox", fromUserId, toUserId, subject, timeUuid);
         emailsListRepository.save(inboxEntry);
+        // Save email entity
+        Email email = new Email();
+        email.setId(timeUuid);
+        email.setFrom(fromUserId);
+        email.setTo(Arrays.asList(toUserId));
+        email.setSubject(subject);
+        email.setBody(body);
+        emailRepository.save(email);
         
     }
 
