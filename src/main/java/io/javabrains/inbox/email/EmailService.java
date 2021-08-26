@@ -1,12 +1,15 @@
 package io.javabrains.inbox.email;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import io.javabrains.inbox.emailslist.EmailsList;
 import io.javabrains.inbox.emailslist.EmailsListPrimaryKey;
@@ -21,37 +24,48 @@ public class EmailService {
     @Autowired
     private EmailRepository emailRepository;
 
-    public void sendEmail(String fromUserId, String toUserId, String subject, String body) {
+    public void sendEmail(String fromUserId, String toUserIds, String subject, String body) {
 
         UUID timeUuid = Uuids.timeBased();
+
+        List<String> toUserIdList = Arrays.asList(toUserIds.split(",")).stream()
+                .map(id -> StringUtils.trimWhitespace(id)).filter(id -> StringUtils.hasText(id))
+                .collect(Collectors.toList());
         // Add to sent items of sender
-        EmailsList sentItemEntry = prepareEmailsListEntry("Sent", fromUserId, toUserId, subject, timeUuid);
+        EmailsList sentItemEntry = prepareEmailsListEntry("Sent", fromUserId, fromUserId, toUserIdList, subject,
+                timeUuid);
         emailsListRepository.save(sentItemEntry);
         // Add to inbox of each reciever
-        EmailsList inboxEntry = prepareEmailsListEntry("Inbox", fromUserId, toUserId, subject, timeUuid);
-        emailsListRepository.save(inboxEntry);
+        toUserIdList.stream().forEach(toUserId -> {
+            EmailsList inboxEntry = prepareEmailsListEntry("Inbox", toUserId, fromUserId, toUserIdList, subject,
+                    timeUuid);
+            emailsListRepository.save(inboxEntry);
+        });
+
         // Save email entity
         Email email = new Email();
         email.setId(timeUuid);
         email.setFrom(fromUserId);
-        email.setTo(Arrays.asList(toUserId));
+        email.setTo(toUserIdList);
         email.setSubject(subject);
         email.setBody(body);
         emailRepository.save(email);
-        
+
     }
 
-    private EmailsList prepareEmailsListEntry(String folderName, String fromUserId, String toUserId, String subject, UUID timeUuid) {
+    private EmailsList prepareEmailsListEntry(String folderName, String forUser, String fromUserId,
+            List<String> toUserIds, String subject, UUID timeUuid) {
+
         EmailsListPrimaryKey key = new EmailsListPrimaryKey();
         key.setLabel(folderName);
-        key.setUserId(fromUserId);
+        key.setUserId(forUser);
         key.setTimeId(timeUuid);
         EmailsList emailsListEntry = new EmailsList();
         emailsListEntry.setId(key);
         emailsListEntry.setFrom(fromUserId);
-        emailsListEntry.setTo(toUserId);
+        emailsListEntry.setTo(toUserIds);
         emailsListEntry.setSubject(subject);
         return emailsListEntry;
     }
-    
+
 }

@@ -1,6 +1,7 @@
 package io.javabrains.inbox;
 
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
@@ -58,7 +59,7 @@ public class SpringGitHubLoginApplication {
 			emailsListEntry.setFrom("testuser" + i);
 			emailsListEntry.setSubject("Hello " + i);
 			emailsListEntry.setRead(false);
-			emailsListEntry.setTo("koushikkothagal");
+			emailsListEntry.setTo(Arrays.asList("koushikkothagal"));
 			
 
 			emailsListRepository.save(emailsListEntry);

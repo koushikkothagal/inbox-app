@@ -1,7 +1,10 @@
 package io.javabrains.inbox.emailslist;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
+import org.springframework.data.cassandra.core.mapping.CassandraType.Name;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -14,8 +17,8 @@ public class EmailsList {
     @CassandraType(type = CassandraType.Name.TEXT)
     private String from;
 
-    @CassandraType(type = CassandraType.Name.TEXT)
-    private String to;
+    @CassandraType(type = CassandraType.Name.LIST, typeArguments = Name.TEXT)
+    private List<String> to;
 
     @CassandraType(type = CassandraType.Name.TEXT)
     private String subject;
@@ -43,11 +46,11 @@ public class EmailsList {
         this.from = from;
     }
 
-    public String getTo() {
+    public List<String> getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(List<String> to) {
         this.to = to;
     }
 
