@@ -1,6 +1,7 @@
 package io.javabrains.inbox.controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ import io.javabrains.inbox.emailslist.EmailsListPrimaryKey;
 import io.javabrains.inbox.emailslist.EmailsListRepository;
 import io.javabrains.inbox.folders.Folder;
 import io.javabrains.inbox.folders.FolderRepository;
-import io.javabrains.inbox.folders.InitFolders;
+import io.javabrains.inbox.folders.FoldersService;
 import io.javabrains.inbox.folders.UnreadEmailStatsRepository;
 
 @Controller
@@ -37,13 +38,15 @@ public class EmailPageController {
 
     @Autowired
 	private UnreadEmailStatsRepository unreadEmailStatsRepository;
+    @Autowired
+	private FoldersService foldersService;
 
     @GetMapping(value = "/email/{id}")
     public String getEmailPage(@PathVariable String id, @RequestParam String folder, @AuthenticationPrincipal OAuth2User principal, Model model) {
         if (principal != null && principal.getAttribute("login") != null) {
             String loginId = principal.getAttribute("login");
             List<Folder> folders = folderRepository.findAllById(loginId);
-            List<Folder> initFolders = InitFolders.init(loginId);
+            List<Folder> initFolders = foldersService.init(loginId);
                 // initFolders.stream().forEach(folderRepository::save);
             model.addAttribute("defaultFolders", initFolders);
             if (folders.size() > 0) {
@@ -69,7 +72,9 @@ public class EmailPageController {
                     }
                     emailListItem.setRead(true);
                     emailsListRepository.save(emailListItem);
-                    
+                    Map<String, Integer> folderToUnreadCounts = foldersService.getUnreadCountsMap(loginId);
+                    model.addAttribute("folderToUnreadCounts", folderToUnreadCounts);
+            
                     return "email-page";
                 }
             } catch (IllegalArgumentException e) {

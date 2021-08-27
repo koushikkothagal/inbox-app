@@ -2,7 +2,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
   <body>
-    <div th:fragment="folder-list (panelName, folders)">
+    <div th:fragment="folder-list (panelName, folders, folderToUnreadCounts)">
         <div class="card" th:if="${folders}">
             <div class="card-header" th:text="${panelName}">Folders</div>
             <div class="card-body">
@@ -17,7 +17,7 @@
                 th:each="folder : ${folders}">
   
                   <span th:text="${folder.label}">Folder</span>
-                  <span class="badge bg-primary rounded-pill">15</span>
+                  <span th:if="${folderToUnreadCounts.get(folder.label)}" th:text="${folderToUnreadCounts.get(folder.label)}" class="badge bg-primary rounded-pill">15</span>
               </a>
             </div>
             </div>

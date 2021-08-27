@@ -38,6 +38,7 @@ public class EmailService {
         // Add to sent items of sender
         EmailsList sentItemEntry = prepareEmailsListEntry("Sent", fromUserId, fromUserId, toUserIdList, subject,
                 timeUuid);
+        sentItemEntry.setRead(true);
         emailsListRepository.save(sentItemEntry);
         // Add to inbox of each reciever
         toUserIdList.stream().forEach(toUserId -> {

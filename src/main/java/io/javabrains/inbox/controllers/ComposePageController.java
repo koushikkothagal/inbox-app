@@ -1,6 +1,7 @@
 package io.javabrains.inbox.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import io.javabrains.inbox.email.EmailService;
 import io.javabrains.inbox.folders.Folder;
 import io.javabrains.inbox.folders.FolderRepository;
-import io.javabrains.inbox.folders.InitFolders;
+import io.javabrains.inbox.folders.FoldersService;
 
 @Controller
 public class ComposePageController {
@@ -27,6 +28,8 @@ public class ComposePageController {
 
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private FoldersService foldersService;
 
     
     @GetMapping(value = "/compose")
@@ -34,12 +37,15 @@ public class ComposePageController {
         if (principal != null && principal.getAttribute("login") != null) {
             String loginId = principal.getAttribute("login");
             List<Folder> folders = folderRepository.findAllById(loginId);
-            List<Folder> initFolders = InitFolders.init(loginId);
+            List<Folder> initFolders = foldersService.init(loginId);
                 // initFolders.stream().forEach(folderRepository::save);
             model.addAttribute("defaultFolders", initFolders);
             if (folders.size() > 0) {
                 model.addAttribute("userFolders", folders);
             }
+            Map<String, Integer> folderToUnreadCounts = foldersService.getUnreadCountsMap(loginId);
+            model.addAttribute("folderToUnreadCounts", folderToUnreadCounts);
+            
             return "compose-page";
         }
         return "index";

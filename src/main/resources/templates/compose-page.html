@@ -57,10 +57,10 @@
 
       <nav>
         <div
-          th:insert="components/folder-list :: folder-list (panelName = 'Folders', folders = ${defaultFolders})"
+          th:insert="components/folder-list :: folder-list (panelName = 'Folders', folders = ${defaultFolders}, folderToUnreadCounts = ${folderToUnreadCounts})"
         ></div>
         <div
-          th:insert="components/folder-list :: folder-list (panelName = 'My folders', folders = ${userFolders})"
+          th:insert="components/folder-list :: folder-list (panelName = 'My folders', folders = ${userFolders}, folderToUnreadCounts = ${folderToUnreadCounts})"
         ></div>
       </nav>
 

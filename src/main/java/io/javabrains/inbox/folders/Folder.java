@@ -2,6 +2,7 @@ package io.javabrains.inbox.folders;
 
 import java.util.UUID;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.cassandra.core.cql.Ordering;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
@@ -24,6 +25,10 @@ public class Folder {
 
     @CassandraType(type = CassandraType.Name.TEXT)
     private String color;
+
+    @Transient
+    private int unreadCount;
+
 
 
     public Folder() {}
@@ -56,6 +61,14 @@ public class Folder {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public int getUnreadCount() {
+        return unreadCount;
+    }
+
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
     }
 
     // public UUID getCreatedTimeUuid() {
