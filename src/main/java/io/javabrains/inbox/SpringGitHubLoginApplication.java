@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.javabrains.inbox.email.EmailService;
 import io.javabrains.inbox.emailslist.EmailsList;
 import io.javabrains.inbox.emailslist.EmailsListPrimaryKey;
 import io.javabrains.inbox.emailslist.EmailsListRepository;
@@ -26,7 +27,7 @@ import io.javabrains.inbox.emailslist.EmailsListRepository;
 public class SpringGitHubLoginApplication {
 
 	@Autowired
-	private EmailsListRepository emailsListRepository;
+	private EmailService emailService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringGitHubLoginApplication.class, args);
@@ -49,22 +50,9 @@ public class SpringGitHubLoginApplication {
 
 		for (int i = 0; i < 10; i++) {
 
-			EmailsListPrimaryKey key = new EmailsListPrimaryKey();
-			key.setUserId("koushikkothagal");
-			key.setLabel("Inbox");
-			key.setTimeId(Uuids.timeBased());
-
-			EmailsList emailsListEntry = new EmailsList();
-			emailsListEntry.setId(key);
-			emailsListEntry.setFrom("testuser" + i);
-			emailsListEntry.setSubject("Hello " + i);
-			emailsListEntry.setRead(false);
-			emailsListEntry.setTo(Arrays.asList("koushikkothagal"));
-			
-
-			emailsListRepository.save(emailsListEntry);
+			emailService.sendEmail("koushikkothagal", "koushikkothagal", "Test " + i, "Body " + i);
 		}
-		System.out.println(emailsListRepository.findAllById_UserIdAndId_Label("koushikkothagal", "Inbox"));
+		
 
 	}
 

@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import io.javabrains.inbox.emailslist.EmailsList;
 import io.javabrains.inbox.emailslist.EmailsListPrimaryKey;
 import io.javabrains.inbox.emailslist.EmailsListRepository;
+import io.javabrains.inbox.folders.UnreadEmailStatsRepository;
 
 @Service
 public class EmailService {
@@ -23,6 +24,9 @@ public class EmailService {
 
     @Autowired
     private EmailRepository emailRepository;
+
+    @Autowired
+    private UnreadEmailStatsRepository unreadEmailStatsRepository;
 
     public void sendEmail(String fromUserId, String toUserIds, String subject, String body) {
 
@@ -39,7 +43,9 @@ public class EmailService {
         toUserIdList.stream().forEach(toUserId -> {
             EmailsList inboxEntry = prepareEmailsListEntry("Inbox", toUserId, fromUserId, toUserIdList, subject,
                     timeUuid);
+            inboxEntry.setRead(false);
             emailsListRepository.save(inboxEntry);
+            unreadEmailStatsRepository.incrementUnreadCounter(toUserId, "Inbox");
         });
 
         // Save email entity

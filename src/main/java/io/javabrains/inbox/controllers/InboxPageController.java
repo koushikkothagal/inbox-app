@@ -46,6 +46,7 @@ public class InboxPageController {
             if (StringUtils.isBlank(folder)) {
                 folder = "Inbox";
             }
+            model.addAttribute("currentFolder", folder);
             List<EmailsList> emails = emailsListRepository.findAllById_UserIdAndId_Label(loginId, folder);
             emails.stream().forEach(
                 email -> {

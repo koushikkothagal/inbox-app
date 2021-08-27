@@ -11,12 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io.javabrains.inbox.email.Email;
 import io.javabrains.inbox.email.EmailRepository;
+import io.javabrains.inbox.emailslist.EmailsList;
+import io.javabrains.inbox.emailslist.EmailsListPrimaryKey;
+import io.javabrains.inbox.emailslist.EmailsListRepository;
 import io.javabrains.inbox.folders.Folder;
 import io.javabrains.inbox.folders.FolderRepository;
 import io.javabrains.inbox.folders.InitFolders;
+import io.javabrains.inbox.folders.UnreadEmailStatsRepository;
 
 @Controller
 public class EmailPageController {
@@ -27,8 +32,14 @@ public class EmailPageController {
     @Autowired
 	private EmailRepository emailRepository;
 
+    @Autowired
+	private EmailsListRepository emailsListRepository;
+
+    @Autowired
+	private UnreadEmailStatsRepository unreadEmailStatsRepository;
+
     @GetMapping(value = "/email/{id}")
-    public String getEmailPage(@PathVariable String id, @AuthenticationPrincipal OAuth2User principal, Model model) {
+    public String getEmailPage(@PathVariable String id, @RequestParam String folder, @AuthenticationPrincipal OAuth2User principal, Model model) {
         if (principal != null && principal.getAttribute("login") != null) {
             String loginId = principal.getAttribute("login");
             List<Folder> folders = folderRepository.findAllById(loginId);
@@ -46,6 +57,19 @@ public class EmailPageController {
                     String toIds = String.join(",", email.getTo());
                     model.addAttribute("email", optionalEmail.get());
                     model.addAttribute("toIds", toIds);
+                    EmailsListPrimaryKey key = new EmailsListPrimaryKey();
+                    key.setUserId(loginId);
+                    key.setLabel(folder);
+                    key.setTimeId(email.getId());
+                    Optional<EmailsList> optionalEmailListItem = emailsListRepository.findById(key);
+                    if (!optionalEmailListItem.isPresent()) throw new IllegalArgumentException();
+                    EmailsList emailListItem = optionalEmailListItem.get();
+                    if (!emailListItem.isRead()) {
+                        unreadEmailStatsRepository.decrementUnreadCounter(loginId, folder);
+                    }
+                    emailListItem.setRead(true);
+                    emailsListRepository.save(emailListItem);
+                    
                     return "email-page";
                 }
             } catch (IllegalArgumentException e) {
